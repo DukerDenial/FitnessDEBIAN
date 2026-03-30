@@ -12,23 +12,30 @@
 
 <body>
 
+<!-- MAIN -->
 <div id="main" class="screen">
-    <div class="title">💪 Fitness</div>
+
+    <div class="header">
+        <span>💪 Fitness</span>
+    </div>
 
     <div class="card center">
+
         <div class="circle" id="waterCircle">
-            <div class="inner" id="waterVal">0</div>
+            <div class="inner" id="waterVal">0 мл</div>
         </div>
 
         <div class="row">
             <button onclick="addWater()">+250</button>
-            <button onclick="removeWater()">-250</button>
+            <button class="secondary" onclick="removeWater()">-250</button>
         </div>
+
     </div>
 
     <div class="card">
-        <button onclick="openCalendar()">📅 Календарь</button>
+        <button class="big-btn" onclick="openCalendar()">📅 Календарь</button>
     </div>
+
 </div>
 
 <!-- CALENDAR -->
@@ -43,6 +50,7 @@
     <div id="calendar" class="calendar"></div>
 
     <button class="back" onclick="backMain()">⬅ Назад</button>
+
 </div>
 
 <!-- DAY -->
@@ -51,9 +59,11 @@
     <div id="dayTitle" class="title"></div>
 
     <textarea id="workout" placeholder="Тренировка"></textarea>
-    <button onclick="saveWorkout()">Сохранить</button>
+
+    <button onclick="saveWorkout()">💪 Сохранить</button>
 
     <button class="back" onclick="backCalendar()">⬅ Назад</button>
+
 </div>
 
 <script src="app.js"></script>

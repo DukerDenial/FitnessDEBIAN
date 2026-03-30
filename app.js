@@ -35,10 +35,16 @@ function updateWater() {
     let percent = Math.min(water / 2000, 1);
     let deg = percent * 360;
 
-    document.getElementById("waterCircle").style.background =
+    const circle = document.getElementById("waterCircle");
+
+    circle.style.background =
         `conic-gradient(#22c55e ${deg}deg, #1e293b ${deg}deg)`;
 
     document.getElementById("waterVal").innerText = water + " мл";
+
+    // 🔥 анимация
+    circle.style.transform = "scale(1.05)";
+    setTimeout(() => circle.style.transform = "scale(1)", 150);
 }
 
 function addWater() {
@@ -51,31 +57,23 @@ function removeWater() {
     updateWater();
 }
 
-function resetWater() {
-    water = 0;
-    updateWater();
-}
-
 // ---------- CALENDAR ----------
 function drawCalendar() {
 
-    let cal = document.getElementById("calendar");
+    const cal = document.getElementById("calendar");
     cal.innerHTML = "";
 
     let year = currentDate.getFullYear();
     let month = currentDate.getMonth();
 
-    // 🔥 НОРМАЛЬНЫЙ ЗАГОЛОВОК
     document.getElementById("monthTitle").innerText =
         months[month] + " " + year;
 
     let firstDay = new Date(year, month, 1).getDay();
     let days = new Date(year, month + 1, 0).getDate();
 
-    // поправка на понедельник
-    firstDay = (firstDay === 0) ? 6 : firstDay - 1;
+    firstDay = firstDay === 0 ? 6 : firstDay - 1;
 
-    // пустые ячейки
     for (let i = 0; i < firstDay; i++) {
         cal.innerHTML += "<div></div>";
     }
@@ -88,7 +86,6 @@ function drawCalendar() {
         el.className = "day";
         el.innerText = i;
 
-        // 🔥 выделение текущего дня
         if (
             i === today.getDate() &&
             month === today.getMonth() &&
