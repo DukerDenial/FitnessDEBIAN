@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fitness Pro</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -13,16 +11,27 @@ body {
     margin: 0;
     background: #0f172a;
     color: white;
-    font-family: -apple-system, sans-serif;
+    font-family: -apple-system;
+    overflow: hidden;
 }
 
-.container {
-    padding: 16px;
+/* SCREENS */
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    transition: 0.4s;
 }
 
+.hidden {
+    transform: translateX(100%);
+}
+
+/* TITLE */
 .title {
     font-size: 22px;
-    font-weight: 600;
+    font-weight: bold;
     margin-bottom: 15px;
 }
 
@@ -31,25 +40,25 @@ body {
     background: #1e293b;
     border-radius: 16px;
     padding: 15px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
-/* WATER RING */
+/* WATER */
 .circle {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     background: conic-gradient(#22c55e 0deg, #334155 0deg);
+    margin: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: auto;
-    transition: 1s;
+    transition: 0.6s;
 }
 
 .inner {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
     background: #0f172a;
     border-radius: 50%;
     display: flex;
@@ -61,7 +70,7 @@ body {
 button {
     width: 100%;
     padding: 12px;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
     background: #22c55e;
     color: white;
@@ -77,12 +86,12 @@ button {
 
 .day {
     background: #334155;
+    padding: 10px;
     border-radius: 8px;
-    padding: 8px;
     text-align: center;
 }
 
-.active {
+.day.active {
     background: #22c55e;
 }
 </style>
@@ -90,39 +99,45 @@ button {
 
 <body>
 
-<div class="container">
+<!-- MAIN -->
+<div id="main" class="screen">
+    <div class="title">💪 Fitness</div>
 
-<div class="title">💪 Fitness Pro</div>
-
-<!-- WATER -->
-<div class="card">
-    <h3>💧 Вода</h3>
-
-    <div class="circle" id="waterCircle">
-        <div class="inner">
-            <span id="waterVal">0 мл</span>
+    <div class="card">
+        <div class="circle" id="waterCircle">
+            <div class="inner">
+                <span id="waterVal">0</span>
+            </div>
         </div>
+
+        <button onclick="addWater()">+250 мл</button>
+        <button onclick="removeWater()">-250 мл</button>
     </div>
 
-    <button onclick="addWater()">+250 мл</button>
-</div>
-
-<!-- WORKOUT -->
-<div class="card">
-    <h3>➕ Тренировка</h3>
-
-    <textarea id="workout" placeholder="Тренировка" style="width:100%; border-radius:10px; padding:10px;"></textarea>
-
-    <button onclick="addWorkout()">Сохранить</button>
+    <div class="card">
+        <button onclick="openCalendar()">📅 Открыть календарь</button>
+    </div>
 </div>
 
 <!-- CALENDAR -->
-<div class="card">
-    <h3>📅 Календарь</h3>
+<div id="calendarScreen" class="screen hidden">
+    <div class="title">📅 Календарь</div>
 
     <div class="calendar" id="calendar"></div>
+
+    <button onclick="backMain()">⬅ Назад</button>
 </div>
 
+<!-- DAY -->
+<div id="dayScreen" class="screen hidden">
+    <div class="title" id="dayTitle"></div>
+
+    <div class="card">
+        <textarea id="workout" placeholder="Тренировка" style="width:100%; border-radius:10px;"></textarea>
+        <button onclick="saveWorkout()">💪 Сохранить</button>
+    </div>
+
+    <button onclick="backCalendar()">⬅ Назад</button>
 </div>
 
 <script>
@@ -130,13 +145,31 @@ button {
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// ------- DATA -------
-let water = 1200;
-let target = 2000;
+// ---------- STATE ----------
+let water = 0;
+let selectedDay = null;
 
-// ------- WATER ANIMATION -------
+// ---------- NAV ----------
+function openCalendar() {
+    switchScreen("calendarScreen");
+}
+
+function backMain() {
+    switchScreen("main");
+}
+
+function backCalendar() {
+    switchScreen("calendarScreen");
+}
+
+function switchScreen(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+}
+
+// ---------- WATER ----------
 function updateWater() {
-    let percent = water / target;
+    let percent = water / 2000;
     let deg = percent * 360;
 
     document.getElementById("waterCircle").style.background =
@@ -150,41 +183,46 @@ function addWater() {
     updateWater();
 }
 
-updateWater();
-
-// ------- WORKOUT -------
-function addWorkout() {
-    let val = document.getElementById("workout").value;
-    alert("🔥 Сохранено: " + val);
+function removeWater() {
+    water = Math.max(0, water - 250);
+    updateWater();
 }
 
-// ------- CALENDAR -------
+// ---------- CALENDAR ----------
 function drawCalendar() {
-
     let cal = document.getElementById("calendar");
     cal.innerHTML = "";
 
     let today = new Date();
 
     for (let i = 1; i <= 30; i++) {
-
         let el = document.createElement("div");
         el.className = "day";
         el.innerText = i;
 
-        if (i === today.getDate()) {
-            el.classList.add("active");
-        }
+        if (i === today.getDate()) el.classList.add("active");
 
-        el.onclick = () => {
-            alert("Выбран день " + i);
-        }
+        el.onclick = () => openDay(i);
 
         cal.appendChild(el);
     }
 }
 
+// ---------- DAY ----------
+function openDay(day) {
+    selectedDay = day;
+    document.getElementById("dayTitle").innerText = "📅 День " + day;
+    switchScreen("dayScreen");
+}
+
+function saveWorkout() {
+    let val = document.getElementById("workout").value;
+    alert("🔥 Сохранено: " + val);
+}
+
+// ---------- INIT ----------
 drawCalendar();
+updateWater();
 
 </script>
 
