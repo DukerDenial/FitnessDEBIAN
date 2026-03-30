@@ -6,6 +6,11 @@ let water = 0;
 let currentDate = new Date();
 let selectedDay = null;
 
+const months = [
+    "Январь","Февраль","Март","Апрель","Май","Июнь",
+    "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"
+];
+
 // ---------- NAV ----------
 function switchScreen(id) {
     document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
@@ -27,7 +32,7 @@ function backCalendar() {
 
 // ---------- WATER ----------
 function updateWater() {
-    let percent = water / 2000;
+    let percent = Math.min(water / 2000, 1);
     let deg = percent * 360;
 
     document.getElementById("waterCircle").style.background =
@@ -46,6 +51,11 @@ function removeWater() {
     updateWater();
 }
 
+function resetWater() {
+    water = 0;
+    updateWater();
+}
+
 // ---------- CALENDAR ----------
 function drawCalendar() {
 
@@ -55,21 +65,37 @@ function drawCalendar() {
     let year = currentDate.getFullYear();
     let month = currentDate.getMonth();
 
+    // 🔥 НОРМАЛЬНЫЙ ЗАГОЛОВОК
+    document.getElementById("monthTitle").innerText =
+        months[month] + " " + year;
+
     let firstDay = new Date(year, month, 1).getDay();
     let days = new Date(year, month + 1, 0).getDate();
 
-    document.getElementById("monthTitle").innerText =
-        currentDate.toLocaleString("ru", { month: "long", year: "numeric" });
+    // поправка на понедельник
+    firstDay = (firstDay === 0) ? 6 : firstDay - 1;
 
+    // пустые ячейки
     for (let i = 0; i < firstDay; i++) {
         cal.innerHTML += "<div></div>";
     }
+
+    let today = new Date();
 
     for (let i = 1; i <= days; i++) {
 
         let el = document.createElement("div");
         el.className = "day";
         el.innerText = i;
+
+        // 🔥 выделение текущего дня
+        if (
+            i === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+        ) {
+            el.classList.add("active");
+        }
 
         el.onclick = () => openDay(i);
 
@@ -91,14 +117,26 @@ function nextMonth() {
 function openDay(day) {
     selectedDay = day;
 
+    let month = currentDate.getMonth();
+    let year = currentDate.getFullYear();
+
     document.getElementById("dayTitle").innerText =
-        currentDate.toLocaleDateString() + " / " + day;
+        day + " " + months[month] + " " + year;
 
     switchScreen("dayScreen");
 }
 
 function saveWorkout() {
-    alert("🔥 Сохранено");
+    let text = document.getElementById("workout").value;
+
+    if (!text) {
+        alert("Введите тренировку");
+        return;
+    }
+
+    alert("🔥 Сохранено: " + text);
+
+    document.getElementById("workout").value = "";
 }
 
 // ---------- INIT ----------

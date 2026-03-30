@@ -100,3 +100,8 @@ button {
     justify-content: space-between;
     margin-bottom: 15px;
 }
+
+#monthTitle {
+    font-size: 18px;
+    font-weight: 600;
+}
