@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Fitness Pro</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -11,17 +13,51 @@ body {
     margin: 0;
     background: #0f172a;
     color: white;
-    font-family: sans-serif;
-    padding: 20px;
+    font-family: -apple-system, sans-serif;
 }
 
-.card {
-    background: #1e293b;
-    border-radius: 15px;
-    padding: 15px;
+.container {
+    padding: 16px;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 600;
     margin-bottom: 15px;
 }
 
+/* CARD */
+.card {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+/* WATER RING */
+.circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(#22c55e 0deg, #334155 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    transition: 1s;
+}
+
+.inner {
+    width: 90px;
+    height: 90px;
+    background: #0f172a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* BUTTON */
 button {
     width: 100%;
     padding: 12px;
@@ -31,27 +67,62 @@ button {
     color: white;
     margin-top: 10px;
 }
+
+/* CALENDAR */
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.day {
+    background: #334155;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+}
+
+.active {
+    background: #22c55e;
+}
 </style>
 </head>
 
 <body>
 
-<h2>💪 Fitness PRO</h2>
+<div class="container">
 
+<div class="title">💪 Fitness Pro</div>
+
+<!-- WATER -->
 <div class="card">
-    <div>⚖ Вес: <span id="weight">--</span></div>
-    <div>💧 Вода: <span id="water">0</span></div>
-    <div>🍽 Еда: <span id="food">0</span></div>
+    <h3>💧 Вода</h3>
+
+    <div class="circle" id="waterCircle">
+        <div class="inner">
+            <span id="waterVal">0 мл</span>
+        </div>
+    </div>
+
+    <button onclick="addWater()">+250 мл</button>
 </div>
 
+<!-- WORKOUT -->
 <div class="card">
-    <button onclick="addWater()">💧 +250 мл</button>
-    <button onclick="addFood()">🍽 Поел</button>
+    <h3>➕ Тренировка</h3>
+
+    <textarea id="workout" placeholder="Тренировка" style="width:100%; border-radius:10px; padding:10px;"></textarea>
+
+    <button onclick="addWorkout()">Сохранить</button>
 </div>
 
+<!-- CALENDAR -->
 <div class="card">
-    <textarea id="workout" placeholder="Тренировка"></textarea>
-    <button onclick="addWorkout()">➕ Добавить тренировку</button>
+    <h3>📅 Календарь</h3>
+
+    <div class="calendar" id="calendar"></div>
+</div>
+
 </div>
 
 <script>
@@ -59,26 +130,61 @@ button {
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-const user = tg.initDataUnsafe?.user?.id || 1;
+// ------- DATA -------
+let water = 1200;
+let target = 2000;
 
-// ⚠️ ВРЕМЕННО (без API)
-document.getElementById("weight").innerText = "83";
-document.getElementById("water").innerText = "1200";
-document.getElementById("food").innerText = "3";
+// ------- WATER ANIMATION -------
+function updateWater() {
+    let percent = water / target;
+    let deg = percent * 360;
 
-// ------ ACTIONS ------
+    document.getElementById("waterCircle").style.background =
+        `conic-gradient(#22c55e ${deg}deg, #334155 ${deg}deg)`;
 
-function addWorkout(){
-    alert("🔥 Тренировка сохранена");
+    document.getElementById("waterVal").innerText = water + " мл";
 }
 
-function addWater(){
-    alert("+250 мл");
+function addWater() {
+    water += 250;
+    updateWater();
 }
 
-function addFood(){
-    alert("🍽 Добавлено");
+updateWater();
+
+// ------- WORKOUT -------
+function addWorkout() {
+    let val = document.getElementById("workout").value;
+    alert("🔥 Сохранено: " + val);
 }
+
+// ------- CALENDAR -------
+function drawCalendar() {
+
+    let cal = document.getElementById("calendar");
+    cal.innerHTML = "";
+
+    let today = new Date();
+
+    for (let i = 1; i <= 30; i++) {
+
+        let el = document.createElement("div");
+        el.className = "day";
+        el.innerText = i;
+
+        if (i === today.getDate()) {
+            el.classList.add("active");
+        }
+
+        el.onclick = () => {
+            alert("Выбран день " + i);
+        }
+
+        cal.appendChild(el);
+    }
+}
+
+drawCalendar();
 
 </script>
 
