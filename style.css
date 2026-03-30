@@ -2,10 +2,10 @@ body {
     margin: 0;
     background: #020617;
     color: white;
-    font-family: -apple-system;
+    font-family: -apple-system, sans-serif;
 }
 
-/* SCREEN */
+/* ЭКРАНЫ */
 .screen {
     display: none;
     min-height: 100vh;
@@ -16,34 +16,59 @@ body {
     display: block;
 }
 
-/* HEADER */
-.header {
+/* ЗАГОЛОВОК */
+.title {
+    font-size: 22px;
+    font-weight: 600;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.title {
-    font-size: 22px;
-    font-weight: 600;
-}
-
-/* CARD */
+/* КАРТОЧКА */
 .card {
     background: #0f172a;
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 15px;
     margin-bottom: 15px;
+}
+
+/* КНОПКИ */
+button {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.primary {
+    background: #22c55e;
+    color: white;
+}
+
+.secondary {
+    background: #1e293b;
+    color: white;
+}
+
+/* РЯД */
+.row {
+    display: flex;
+    gap: 10px;
 }
 
 /* 💧 БУТЫЛКА */
 .bottle {
-    width: 90px;
+    width: 100px;
     height: 200px;
-    margin: auto;
+    margin: 0 auto 10px;
     border: 2px solid #334155;
     border-radius: 20px;
-    overflow: hidden;
     position: relative;
+    overflow: hidden;
 }
 
 .water {
@@ -51,66 +76,49 @@ body {
     bottom: 0;
     width: 100%;
     height: 0%;
-    background: linear-gradient(#38bdf8, #0ea5e9);
-    transition: height 0.5s;
+    background: linear-gradient(180deg, #38bdf8, #0ea5e9);
+    transition: height 0.5s ease;
 }
 
-#bubbles {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.bubble {
-    position: absolute;
-    bottom: 0;
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-    animation: rise 2s linear infinite;
-}
-
-@keyframes rise {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-200px); opacity: 0; }
-}
-
-.water-text {
+#waterVal {
     text-align: center;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-/* BUTTONS */
-.row {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-button {
-    flex: 1;
-    padding: 12px;
-    border-radius: 12px;
-    border: none;
-}
-
-.primary { background: #22c55e; }
-.secondary { background: #1e293b; }
-
-/* CALENDAR */
+/* 📅 КАЛЕНДАРЬ */
 .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
+    gap: 8px;
 }
 
 .day {
-    aspect-ratio: 1;
+    height: 45px;
+    background: #0f172a;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0f172a;
+    font-size: 16px;
+}
+
+.day.today {
+    border: 2px solid #22c55e;
+}
+
+/* НАВ КНОПКИ */
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.nav-btn {
+    padding: 10px 15px;
     border-radius: 10px;
+    background: #1e293b;
+    border: none;
+    font-size: 18px;
+    color: white;
 }
