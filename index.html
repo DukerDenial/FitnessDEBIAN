@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Fitness App</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+body {
+    background: #0f172a;
+    color: white;
+    font-family: sans-serif;
+    padding: 20px;
+}
+canvas {
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>📊 Статистика</h2>
+
+<canvas id="weightChart"></canvas>
+<canvas id="waterChart"></canvas>
+
+<script>
+
+const tg = window.Telegram.WebApp;
+const userId = tg.initDataUnsafe?.user?.id || 0;
+
+// ⚠️ ВРЕМЕННО (пока без HTTPS API)
+const weights = [70, 72, 71, 73];
+const dates = ["1", "2", "3", "4"];
+
+new Chart(document.getElementById('weightChart'), {
+    type: 'line',
+    data: {
+        labels: dates,
+        datasets: [{
+            label: 'Вес',
+            data: weights,
+            borderWidth: 3
+        }]
+    }
+});
+
+new Chart(document.getElementById('waterChart'), {
+    type: 'bar',
+    data: {
+        labels: dates,
+        datasets: [{
+            label: 'Вода',
+            data: [500, 800, 1200, 900]
+        }]
+    }
+});
+
+</script>
+
+</body>
+</html>
