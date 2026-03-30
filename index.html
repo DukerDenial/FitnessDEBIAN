@@ -2,62 +2,83 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Fitness App</title>
+<title>Fitness Pro</title>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 body {
+    margin: 0;
     background: #0f172a;
     color: white;
     font-family: sans-serif;
     padding: 20px;
 }
-canvas {
-    margin-top: 20px;
+
+.card {
+    background: #1e293b;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #22c55e;
+    color: white;
+    margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>📊 Статистика</h2>
+<h2>💪 Fitness PRO</h2>
 
-<canvas id="weightChart"></canvas>
-<canvas id="waterChart"></canvas>
+<div class="card">
+    <div>⚖ Вес: <span id="weight">--</span></div>
+    <div>💧 Вода: <span id="water">0</span></div>
+    <div>🍽 Еда: <span id="food">0</span></div>
+</div>
+
+<div class="card">
+    <button onclick="addWater()">💧 +250 мл</button>
+    <button onclick="addFood()">🍽 Поел</button>
+</div>
+
+<div class="card">
+    <textarea id="workout" placeholder="Тренировка"></textarea>
+    <button onclick="addWorkout()">➕ Добавить тренировку</button>
+</div>
 
 <script>
 
 const tg = window.Telegram.WebApp;
-const userId = tg.initDataUnsafe?.user?.id || 0;
+tg.expand();
 
-// ⚠️ ВРЕМЕННО (пока без HTTPS API)
-const weights = [70, 72, 71, 73];
-const dates = ["1", "2", "3", "4"];
+const user = tg.initDataUnsafe?.user?.id || 1;
 
-new Chart(document.getElementById('weightChart'), {
-    type: 'line',
-    data: {
-        labels: dates,
-        datasets: [{
-            label: 'Вес',
-            data: weights,
-            borderWidth: 3
-        }]
-    }
-});
+// ⚠️ ВРЕМЕННО (без API)
+document.getElementById("weight").innerText = "83";
+document.getElementById("water").innerText = "1200";
+document.getElementById("food").innerText = "3";
 
-new Chart(document.getElementById('waterChart'), {
-    type: 'bar',
-    data: {
-        labels: dates,
-        datasets: [{
-            label: 'Вода',
-            data: [500, 800, 1200, 900]
-        }]
-    }
-});
+// ------ ACTIONS ------
+
+function addWorkout(){
+    alert("🔥 Тренировка сохранена");
+}
+
+function addWater(){
+    alert("+250 мл");
+}
+
+function addFood(){
+    alert("🍽 Добавлено");
+}
 
 </script>
 
