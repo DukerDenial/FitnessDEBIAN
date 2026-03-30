@@ -30,16 +30,12 @@ function backCalendar() {
     switchScreen("calendarScreen");
 }
 
-// WATER
+// 💧 WATER
 function updateWater() {
     let percent = Math.min(water / 2000, 1);
-    let deg = percent * 360;
+    let height = percent * 100;
 
-    const circle = document.getElementById("waterCircle");
-
-    circle.style.background =
-        `conic-gradient(#22c55e ${deg}deg, #1e293b ${deg}deg)`;
-
+    document.getElementById("waterFill").style.height = height + "%";
     document.getElementById("waterVal").innerText = water + " мл";
 }
 
@@ -53,7 +49,7 @@ function removeWater() {
     updateWater();
 }
 
-// CALENDAR
+// 📅 CALENDAR
 function drawCalendar() {
 
     const cal = document.getElementById("calendar");

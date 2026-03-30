@@ -21,20 +21,22 @@
 
     <div class="card">
 
-        <div class="circle" id="waterCircle">
-            <div class="inner" id="waterVal">0 мл</div>
+        <!-- 💧 БУТЫЛКА -->
+        <div class="bottle-container" onclick="addWater()">
+            <div class="bottle">
+                <div id="waterFill" class="water"></div>
+            </div>
+            <div class="water-text" id="waterVal">0 мл</div>
         </div>
 
-        <!-- 🔥 ВОТ ТВОЙ КУСОК (НОРМ ВСТАВЛЕН) -->
         <div class="row">
-            <button class="primary" onclick="addWater()">+250</button>
             <button class="secondary" onclick="removeWater()">−250</button>
         </div>
 
     </div>
 
     <div class="card">
-        <button class="secondary" onclick="openCalendar()">📅 Календарь</button>
+        <button class="primary" onclick="openCalendar()">📅 Календарь</button>
     </div>
 
 </div>
