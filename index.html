@@ -13,7 +13,7 @@
 <body>
 
 <!-- MAIN -->
-<div id="main" class="screen">
+<div id="main" class="screen active">
 
     <div class="header">
         <div class="title">💪 Fitness</div>
@@ -21,28 +21,29 @@
 
     <div class="card">
 
-        <!-- 💧 БУТЫЛКА -->
-        <div class="bottle-container" onclick="addWater()">
+        <div class="bottle-container">
             <div class="bottle">
                 <div id="waterFill" class="water"></div>
+                <div id="bubbles"></div>
             </div>
             <div class="water-text" id="waterVal">0 мл</div>
         </div>
 
         <div class="row">
-            <button class="secondary" onclick="removeWater()">−250</button>
+            <button class="primary" onclick="addWater()">+250 мл</button>
+            <button class="secondary" onclick="removeWater()">−250 мл</button>
         </div>
 
     </div>
 
     <div class="card">
-        <button class="primary" onclick="openCalendar()">📅 Календарь</button>
+        <button class="secondary" onclick="openCalendar()">📅 Календарь</button>
     </div>
 
 </div>
 
 <!-- CALENDAR -->
-<div id="calendarScreen" class="screen hidden">
+<div id="calendarScreen" class="screen">
 
     <div class="header">
         <button class="nav-btn" onclick="prevMonth()">‹</button>
@@ -52,20 +53,16 @@
 
     <div id="calendar" class="calendar"></div>
 
-    <button class="secondary" onclick="backMain()">Назад</button>
-
 </div>
 
 <!-- DAY -->
-<div id="dayScreen" class="screen hidden">
+<div id="dayScreen" class="screen">
 
     <div id="dayTitle" class="title"></div>
 
     <textarea id="workout" placeholder="Тренировка"></textarea>
 
     <button class="primary" onclick="saveWorkout()">Сохранить</button>
-
-    <button class="secondary" onclick="backCalendar()">Назад</button>
 
 </div>
 

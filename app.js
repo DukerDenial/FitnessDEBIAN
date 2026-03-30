@@ -2,19 +2,20 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 
 // STATE
-let water = 0;
+let water = localStorage.getItem("water") || 0;
+water = parseInt(water);
+
 let currentDate = new Date();
-let selectedDay = null;
 
 const months = [
-    "Январь","Февраль","Март","Апрель","Май","Июнь",
-    "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"
+"Январь","Февраль","Март","Апрель","Май","Июнь",
+"Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"
 ];
 
 // NAV
 function switchScreen(id) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-    document.getElementById(id).classList.remove("hidden");
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
 }
 
 function openCalendar() {
@@ -22,25 +23,25 @@ function openCalendar() {
     switchScreen("calendarScreen");
 }
 
-function backMain() {
-    switchScreen("main");
-}
-
-function backCalendar() {
-    switchScreen("calendarScreen");
-}
-
-// 💧 WATER
+// WATER
 function updateWater() {
     let percent = Math.min(water / 2000, 1);
-    let height = percent * 100;
-
-    document.getElementById("waterFill").style.height = height + "%";
+    document.getElementById("waterFill").style.height = percent * 100 + "%";
     document.getElementById("waterVal").innerText = water + " мл";
+
+    localStorage.setItem("water", water);
+}
+
+function vibrate() {
+    if (tg.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred("medium");
+    }
 }
 
 function addWater() {
     water += 250;
+    vibrate();
+    spawnBubbles();
     updateWater();
 }
 
@@ -49,10 +50,24 @@ function removeWater() {
     updateWater();
 }
 
-// 📅 CALENDAR
+// BUBBLES
+function spawnBubbles() {
+    let container = document.getElementById("bubbles");
+
+    for (let i = 0; i < 5; i++) {
+        let b = document.createElement("div");
+        b.className = "bubble";
+        b.style.left = Math.random() * 80 + "px";
+        container.appendChild(b);
+
+        setTimeout(() => b.remove(), 2000);
+    }
+}
+
+// CALENDAR
 function drawCalendar() {
 
-    const cal = document.getElementById("calendar");
+    let cal = document.getElementById("calendar");
     cal.innerHTML = "";
 
     let year = currentDate.getFullYear();
@@ -61,72 +76,29 @@ function drawCalendar() {
     document.getElementById("monthTitle").innerText =
         months[month] + " " + year;
 
-    let firstDay = new Date(year, month, 1).getDay();
     let days = new Date(year, month + 1, 0).getDate();
 
-    firstDay = firstDay === 0 ? 6 : firstDay - 1;
-
-    for (let i = 0; i < firstDay; i++) {
-        cal.appendChild(document.createElement("div"));
-    }
-
-    let today = new Date();
-
     for (let i = 1; i <= days; i++) {
-
         let el = document.createElement("div");
         el.className = "day";
         el.innerText = i;
-
-        if (
-            i === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear()
-        ) {
-            el.classList.add("today");
-        }
-
-        el.onclick = () => openDay(i);
-
         cal.appendChild(el);
     }
 }
 
-function prevMonth() {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    drawCalendar();
-}
+// SWIPE
+let startX = 0;
 
-function nextMonth() {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    drawCalendar();
-}
+document.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+});
 
-// DAY
-function openDay(day) {
-    selectedDay = day;
+document.addEventListener("touchend", e => {
+    let diff = e.changedTouches[0].clientX - startX;
 
-    let month = currentDate.getMonth();
-    let year = currentDate.getFullYear();
-
-    document.getElementById("dayTitle").innerText =
-        day + " " + months[month] + " " + year;
-
-    switchScreen("dayScreen");
-}
-
-function saveWorkout() {
-    let text = document.getElementById("workout").value;
-
-    if (!text) {
-        alert("Введите тренировку");
-        return;
-    }
-
-    alert("🔥 Сохранено: " + text);
-
-    document.getElementById("workout").value = "";
-}
+    if (diff > 80) switchScreen("main");
+    if (diff < -80) openCalendar();
+});
 
 // INIT
 updateWater();
