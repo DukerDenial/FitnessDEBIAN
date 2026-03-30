@@ -1,7 +1,7 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// ---------- STATE ----------
+// STATE
 let water = 0;
 let currentDate = new Date();
 let selectedDay = null;
@@ -11,7 +11,7 @@ const months = [
     "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"
 ];
 
-// ---------- NAV ----------
+// NAV
 function switchScreen(id) {
     document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
     document.getElementById(id).classList.remove("hidden");
@@ -30,7 +30,7 @@ function backCalendar() {
     switchScreen("calendarScreen");
 }
 
-// ---------- WATER ----------
+// WATER
 function updateWater() {
     let percent = Math.min(water / 2000, 1);
     let deg = percent * 360;
@@ -41,10 +41,6 @@ function updateWater() {
         `conic-gradient(#22c55e ${deg}deg, #1e293b ${deg}deg)`;
 
     document.getElementById("waterVal").innerText = water + " мл";
-
-    // 🔥 анимация
-    circle.style.transform = "scale(1.05)";
-    setTimeout(() => circle.style.transform = "scale(1)", 150);
 }
 
 function addWater() {
@@ -57,7 +53,7 @@ function removeWater() {
     updateWater();
 }
 
-// ---------- CALENDAR ----------
+// CALENDAR
 function drawCalendar() {
 
     const cal = document.getElementById("calendar");
@@ -75,7 +71,7 @@ function drawCalendar() {
     firstDay = firstDay === 0 ? 6 : firstDay - 1;
 
     for (let i = 0; i < firstDay; i++) {
-        cal.innerHTML += "<div></div>";
+        cal.appendChild(document.createElement("div"));
     }
 
     let today = new Date();
@@ -91,7 +87,7 @@ function drawCalendar() {
             month === today.getMonth() &&
             year === today.getFullYear()
         ) {
-            el.classList.add("active");
+            el.classList.add("today");
         }
 
         el.onclick = () => openDay(i);
@@ -110,7 +106,7 @@ function nextMonth() {
     drawCalendar();
 }
 
-// ---------- DAY ----------
+// DAY
 function openDay(day) {
     selectedDay = day;
 
@@ -136,5 +132,5 @@ function saveWorkout() {
     document.getElementById("workout").value = "";
 }
 
-// ---------- INIT ----------
+// INIT
 updateWater();

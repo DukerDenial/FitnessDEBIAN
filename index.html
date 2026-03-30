@@ -16,24 +16,25 @@
 <div id="main" class="screen">
 
     <div class="header">
-        <span>💪 Fitness</span>
+        <div class="title">💪 Fitness</div>
     </div>
 
-    <div class="card center">
+    <div class="card">
 
         <div class="circle" id="waterCircle">
             <div class="inner" id="waterVal">0 мл</div>
         </div>
 
+        <!-- 🔥 ВОТ ТВОЙ КУСОК (НОРМ ВСТАВЛЕН) -->
         <div class="row">
-            <button onclick="addWater()">+250</button>
-            <button class="secondary" onclick="removeWater()">-250</button>
+            <button class="primary" onclick="addWater()">+250</button>
+            <button class="secondary" onclick="removeWater()">−250</button>
         </div>
 
     </div>
 
     <div class="card">
-        <button class="big-btn" onclick="openCalendar()">📅 Календарь</button>
+        <button class="secondary" onclick="openCalendar()">📅 Календарь</button>
     </div>
 
 </div>
@@ -42,14 +43,14 @@
 <div id="calendarScreen" class="screen hidden">
 
     <div class="header">
-        <button onclick="prevMonth()">⬅</button>
-        <div id="monthTitle"></div>
-        <button onclick="nextMonth()">➡</button>
+        <button class="nav-btn" onclick="prevMonth()">‹</button>
+        <div id="monthTitle" class="title"></div>
+        <button class="nav-btn" onclick="nextMonth()">›</button>
     </div>
 
     <div id="calendar" class="calendar"></div>
 
-    <button class="back" onclick="backMain()">⬅ Назад</button>
+    <button class="secondary" onclick="backMain()">Назад</button>
 
 </div>
 
@@ -60,9 +61,9 @@
 
     <textarea id="workout" placeholder="Тренировка"></textarea>
 
-    <button onclick="saveWorkout()">💪 Сохранить</button>
+    <button class="primary" onclick="saveWorkout()">Сохранить</button>
 
-    <button class="back" onclick="backCalendar()">⬅ Назад</button>
+    <button class="secondary" onclick="backCalendar()">Назад</button>
 
 </div>
 
